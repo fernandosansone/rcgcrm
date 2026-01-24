@@ -51,6 +51,31 @@ class ContactController extends Controller
         return redirect()->route('contacts.index')->with('success', 'Contacto creado.');
     }
 
+    public function quickStore(Request $request)
+    {
+        Gate::authorize('create', \App\Models\Contact::class);
+
+        $data = $request->validate([
+            'first_name' => ['required','string','max:100'],
+            'last_name'  => ['required','string','max:100'],
+            'company_name' => ['nullable','string','max:191'],
+            'email_1'    => ['nullable','email','max:191'],
+            'phone_1'    => ['nullable','string','max:30'],
+        ]);
+
+        $data['created_by'] = $request->user()->id;
+
+        $contact = \App\Models\Contact::create($data);
+
+        $label = $contact->last_name . ', ' . $contact->first_name;
+        if ($contact->company_name) $label .= ' — ' . $contact->company_name;
+
+        return response()->json([
+            'id' => $contact->id,
+            'label' => $label,
+        ]);
+    }
+
     public function edit(Contact $contact)
     {
         Gate::authorize('update', $contact);

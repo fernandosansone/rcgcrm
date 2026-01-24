@@ -19,6 +19,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('contacts', ContactController::class);
     Route::resource('opportunities', OpportunityController::class);
+    Route::post('contacts/quick-store', [ContactController::class, 'quickStore'])
+    ->name('contacts.quick-store'); //\App\Http\Controllers\ContactController::class
 });
 
 require __DIR__.'/auth.php';

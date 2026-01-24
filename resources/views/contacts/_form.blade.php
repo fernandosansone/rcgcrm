@@ -45,6 +45,7 @@
 </div>
 
 <div class="mt-4 flex gap-2">
-    <button class="px-4 py-2 bg-black text-white rounded">Guardar</button>
+    <!--<button class="px-4 py-2 bg-black text-white rounded">Guardar</button>-->
+    <x-primary-button>Guardar</x-primary-button>
     <a href="{{ route('contacts.index') }}" class="px-4 py-2 border rounded">Cancelar</a>
 </div>

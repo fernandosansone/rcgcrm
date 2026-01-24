@@ -10,7 +10,7 @@
             <div class="bg-white shadow rounded p-6">
                 <form method="POST" action="{{ route('opportunities.update', $opportunity) }}">
                     @method('PUT')
-                    @include('opportunities._form', ['opportunity' => $opportunity])
+                    @include('opportunities._form', ['showClosedAt' => true], ['opportunity' => $opportunity])
                 </form>
             </div>
         </div>

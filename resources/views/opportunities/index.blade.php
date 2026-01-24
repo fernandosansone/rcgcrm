@@ -25,7 +25,8 @@
                         @endforeach
                     </select>
 
-                    <button class="px-3 py-2 border rounded">Filtrar</button>
+                    <!--<button class="px-3 py-2 border rounded">Filtrar</button>-->
+                    <x-primary-button>Filtrar</x-primary-button>
                 </form>
 
                 @can('opportunities.create')

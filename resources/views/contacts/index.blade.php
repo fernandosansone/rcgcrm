@@ -17,7 +17,8 @@
             <div class="mb-4 flex items-center justify-between gap-3">
                 <form method="GET" class="flex gap-2">
                     <input type="text" name="q" value="{{ $q }}" placeholder="Buscar..." class="border rounded px-3 py-2 w-72">
-                    <button class="px-3 py-2 border rounded">Buscar</button>
+                    <!--<button class="px-3 py-2 border rounded">Buscar</button>-->
+                    <x-primary-button>Filtrar</x-primary-button>
                 </form>
 
                 @can('contacts.create')
