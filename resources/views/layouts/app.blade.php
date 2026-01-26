@@ -14,23 +14,61 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            @include('layouts.navigation')
+<body class="font-sans antialiased bg-gray-50">
+    <div x-data="{ sidebarOpen: false }" class="min-h-screen">
 
-            <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white dark:bg-gray-800 shadow">
+        {{-- Topbar móvil --}}
+        <div class="lg:hidden bg-white border-b border-gray-100">
+            <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+                <button type="button"
+                        class="inline-flex items-center px-3 py-2 rounded-xl ring-1 ring-gray-200"
+                        @click="sidebarOpen = true">
+                ☰
+                </button>
+                <div class="font-semibold text-gray-900">RCg CRM</div>
+
+                <a href="{{ route('dashboard') }}" class="text-sm text-gray-700 underline underline-offset-4">
+                Inicio
+                </a>
+            </div>
+        </div>
+
+        <div class="flex min-h-screen">
+            {{-- Sidebar desktop --}}
+            <div class="hidden lg:block">
+                <x-sidebar />
+            </div>
+
+            {{-- Sidebar móvil (overlay) --}}
+            <div x-show="sidebarOpen" class="lg:hidden fixed inset-0 z-50" style="display:none">
+                <div class="absolute inset-0 bg-black/50" @click="sidebarOpen = false"></div>
+
+                <div class="absolute inset-y-0 left-0 w-72 bg-white shadow-xl">
+                    <div class="p-4 border-b border-gray-100 flex items-center justify-between">
+                        <div class="font-semibold text-gray-900">Mini CRM</div>
+                        <button class="px-3 py-2 rounded-xl ring-1 ring-gray-200" @click="sidebarOpen=false">✕</button>
+                    </div>
+                    <x-sidebar />
+                </div>
+            </div>
+
+            {{-- Contenido --}}
+            <div class="flex-1">
+                {{-- Header del contenido (el que usan tus páginas con <x-slot name="header"> ) --}}
+                @isset($header)
+                <header class="bg-white border-b border-gray-100">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
+                    {{ $header }}
                     </div>
                 </header>
-            @endisset
+                @endisset
 
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+                <main>
+                    {{ $slot }}
+                </main>
+            </div>
+
         </div>
-    </body>
+    </div>
+</body>
 </html>
