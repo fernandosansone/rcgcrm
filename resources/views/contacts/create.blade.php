@@ -9,11 +9,17 @@
   <div class="py-6">
     <div class="max-w-4xl mx-auto sm:px-6 lg:px-8 space-y-4">
 
+      @if (session('success'))
+        <x-card>
+          <x-alert type="success">{{ session('success') }}</x-alert>
+        </x-card>
+      @endif
+
       @if ($errors->any())
         <x-card>
-          <div class="p-3 bg-red-50 border border-red-100 rounded-xl text-red-800">
-            Revisá los campos marcados en rojo.
-          </div>
+          <x-alert type="error">
+            {{ $errors->first() }}
+          </x-alert>
         </x-card>
       @endif
 

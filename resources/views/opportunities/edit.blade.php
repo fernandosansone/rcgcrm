@@ -2,12 +2,12 @@
   <x-slot name="header">
     <div class="flex items-center justify-between gap-4">
       <div>
-        <h2 class="font-semibold text-xl text-gray-900 leading-tight">Editar oportunidad #{{ $opportunity->id }}</h2>
-        <div class="text-sm text-gray-500 mt-1">Actualizá la información y, si corresponde, la fecha de cierre.</div>
+        <h2 class="font-semibold text-xl text-gray-900 leading-tight">Editar oportunidad</h2>
+        <div class="text-sm text-gray-500 mt-1">ID #{{ $opportunity->id }} · Modificá la información y, si corresponde, la fecha de cierre.</div>
       </div>
 
       <a href="{{ route('opportunities.index') }}">
-        <x-secondary-button type="button">Volver</x-secondary-button>
+        <x-secondary-button type="button">Cancelar</x-secondary-button>
       </a>
     </div>
   </x-slot>
