@@ -1,9 +1,10 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\OpportunityController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AgendaController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -19,8 +20,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('contacts', ContactController::class);
     Route::resource('opportunities', OpportunityController::class);
-    Route::post('contacts/quick-store', [ContactController::class, 'quickStore'])
-    ->name('contacts.quick-store'); //\App\Http\Controllers\ContactController::class
+    Route::post('contacts/quick-store', [ContactController::class, 'quickStore'])->name('contacts.quick-store'); //\App\Http\Controllers\ContactController::class
+    Route::get('/agenda', [AgendaController::class, 'index'])->name('agenda.index');
+    Route::post('/agenda/followups', [AgendaController::class, 'storeFollowup'])->name('agenda.followups.store');
 });
 
 require __DIR__.'/auth.php';
