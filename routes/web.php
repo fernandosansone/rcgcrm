@@ -6,9 +6,16 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\OpportunityController;
 use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\UserController;
+
+/*Route::get('/', function () {
+    return view('welcome');
+});*/
 
 Route::get('/', function () {
-    return view('welcome');
+    return auth()->check()
+        ? redirect()->route('dashboard')   // si está logueado
+        : redirect()->route('login');      // si no, login
 });
 
 Route::get('/dashboard', function () {
@@ -19,6 +26,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::resource('users', UserController::class);
     Route::resource('contacts', ContactController::class);
     Route::resource('opportunities', OpportunityController::class);
     Route::post('contacts/quick-store', [ContactController::class, 'quickStore'])->name('contacts.quick-store'); //\App\Http\Controllers\ContactController::class

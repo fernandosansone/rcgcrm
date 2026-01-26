@@ -113,6 +113,19 @@
         </div>
       </a>
     @endcan
+
+    @can('users.view')
+      <a href="{{ route('users.index') }}" class="{{ $navItemClass('users', false) }}">
+        <div class="flex items-center gap-3">
+          <svg class="{{ $iconClass }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16 21v-1a4 4 0 00-4-4H7a4 4 0 00-4 4v1" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 7a4 4 0 110 8 4 4 0 010-8z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M20 8v6m3-3h-6" />
+          </svg>
+          <span>Usuarios</span>
+        </div>
+      </a>
+    @endcan
   </nav>
 
   <div class="p-4 border-t border-gray-100">
