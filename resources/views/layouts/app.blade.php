@@ -71,5 +71,6 @@
 
         </div>
     </div>
+    <x-followups-modal />
 </body>
 </html>

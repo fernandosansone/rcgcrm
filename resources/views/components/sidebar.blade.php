@@ -1,38 +1,5 @@
 @php
-  use Illuminate\Support\Facades\DB;
-
-  $today = \Illuminate\Support\Carbon::today()->toDateString();
-  $userId = auth()->id();
-
-  // ---- Conteo de atrasos (oportunidades asignadas al usuario cuyo último followup tiene next_contact_date < hoy)
-
-  // Subquery: último followup por oportunidad (MAX(contact_date))
-  $latestFollowup = DB::table('opportunity_followups as f')
-    ->select('f.opportunity_id', DB::raw('MAX(f.contact_date) as last_contact_date'))
-    ->groupBy('f.opportunity_id');
-
-  // Subquery: next_contact_date del followup más reciente
-  $lastFollowupData = DB::table('opportunity_followups as f')
-    ->joinSub($latestFollowup, 'lf', function ($join) {
-      $join->on('lf.opportunity_id', '=', 'f.opportunity_id')
-           ->on('lf.last_contact_date', '=', 'f.contact_date');
-    })
-    ->select('f.opportunity_id', 'f.next_contact_date');
-
-  $overdueCount = 0;
-  
-  if (auth()->user()?->can('agenda.view')) {
-    $overdueCount = DB::table('opportunities as o')
-    ->leftJoinSub($lastFollowupData, 'lfd', function ($join) {
-      $join->on('lfd.opportunity_id', '=', 'o.id');
-    })
-    ->where('o.assigned_user_id', $userId)
-    ->whereNotNull('lfd.next_contact_date')
-    ->whereDate('lfd.next_contact_date', '<', $today)
-    ->count();
-  }
-  
-  $navItemClass = function(string $pathPrefix, bool $exactRoute = false, ?string $routeName = null) {
+  $navItemClass = function(string $pathPrefix, ?string $routeName = null) {
     $active = $routeName
       ? request()->routeIs($routeName)
       : request()->is($pathPrefix . '*');
@@ -69,7 +36,7 @@
   <nav class="p-4 space-y-1 flex-1">
     {{-- Dashboard --}}
     @can('dashboard.view')
-    <a href="{{ route('dashboard') }}" class="{{ $navItemClass('dashboard', true, 'dashboard') }}">
+    <a href="{{ route('dashboard') }}" class="{{ $navItemClass('dashboard', 'dashboard') }}">
       <div class="flex items-center gap-3">
         <svg class="{{ $iconClass }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
           <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l9-9 9 9M4.5 10.5V21h5.25v-6h4.5v6H19.5V10.5" />
@@ -81,7 +48,7 @@
 
     {{-- Agenda + badge atrasos --}}
     @can('agenda.view')
-    <a href="{{ route('agenda.index') }}" class="{{ $navItemClass('agenda', false) }}">
+    <a href="{{ route('agenda.index') }}" class="{{ $navItemClass('agenda') }}">
       <div class="flex items-center gap-3">
         <svg class="{{ $iconClass }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
           <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3M4 9h16M6 5h12a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V7a2 2 0 012-2z" />
@@ -89,7 +56,7 @@
         </svg>
         <span>Agenda</span>
       </div>
-      @if($overdueCount > 0)
+      @if(($overdueCount ?? 0) > 0)
         <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-red-50 text-red-700 ring-1 ring-red-200">
           {{ $overdueCount }}
         </span>

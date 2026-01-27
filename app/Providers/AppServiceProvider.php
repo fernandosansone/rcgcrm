@@ -3,6 +3,11 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Gate;
+use App\Models\Opportunity;
+use App\Policies\OpportunityPolicy;
+use App\Models\OpportunityFollowup;
+use App\Policies\OpportunityFollowupPolicy;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Gate::policy(Opportunity::class, OpportunityPolicy::class);
+        Gate::policy(OpportunityFollowup::class, OpportunityFollowupPolicy::class);
     }
 }

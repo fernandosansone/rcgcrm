@@ -12,26 +12,33 @@ class RolesAndPermissionsSeeder extends Seeder
     {
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // Permisos por recurso/acción (base para CRM)
-        $resources = ['contacts', 'opportunities', 'followups', 'quotes', 'reports', 'users'];
+        // Permisos por recurso/acción
+        $resources = ['contacts', 'opportunities', 'followups', 'quotes', 'reports', 'users', 'roles', 'permissions'];
         $actions = ['view', 'create', 'update', 'delete'];
 
         foreach ($resources as $res) {
             foreach ($actions as $act) {
-                Permission::firstOrCreate(['name' => "{$res}.{$act}"]);
+                Permission::firstOrCreate(['name' => "{$res}.{$act}", 'guard_name' => 'web']);
             }
         }
 
-        // Extras típicos
-        Permission::firstOrCreate(['name' => 'dashboard.view']);
-        Permission::firstOrCreate(['name' => 'agenda.view']);
-        Permission::firstOrCreate(['name' => 'opportunities.change_status']);
-        Permission::firstOrCreate(['name' => 'reports.export']);
+        // Extras
+        Permission::firstOrCreate(['name' => 'dashboard.view', 'guard_name' => 'web']);
+        Permission::firstOrCreate(['name' => 'agenda.view', 'guard_name' => 'web']);
+        Permission::firstOrCreate(['name' => 'agenda.followups.create', 'guard_name' => 'web']);
+        Permission::firstOrCreate(['name' => 'opportunities.change_status', 'guard_name' => 'web']);
+        Permission::firstOrCreate(['name' => 'opportunities.view_all', 'guard_name' => 'web']);
+        Permission::firstOrCreate(['name' => 'opportunities.update_all', 'guard_name' => 'web']);
+        Permission::firstOrCreate(['name' => 'opportunities.delete_all', 'guard_name' => 'web']);
+        Permission::firstOrCreate(['name' => 'opportunities.change_status_all', 'guard_name' => 'web']);
+        Permission::firstOrCreate(['name' => 'followups.view_all', 'guard_name' => 'web']);
+        Permission::firstOrCreate(['name' => 'followups.create_all', 'guard_name' => 'web']);
+        Permission::firstOrCreate(['name' => 'reports.export', 'guard_name' => 'web']);
 
-        // Roles
-        $admin = Role::firstOrCreate(['name' => 'Admin']);
-        $supervisor = Role::firstOrCreate(['name' => 'Supervisor']);
-        $exec = Role::firstOrCreate(['name' => 'Ejecutivo']);
+        // Role
+        $admin = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
+        $supervisor = Role::firstOrCreate(['name' => 'Supervisor', 'guard_name' => 'web']);
+        $exec = Role::firstOrCreate(['name' => 'Ejecutivo', 'guard_name' => 'web']);
 
         // Admin: todo
         $admin->syncPermissions(Permission::all());
@@ -50,7 +57,7 @@ class RolesAndPermissionsSeeder extends Seeder
                 'quotes.view','quotes.create','quotes.update',
                 'reports.view',
                 'dashboard.view',
-                'agenda.view',
+                'agenda.view', 'agenda.followups.create',
             ])->get()
         );
     }
