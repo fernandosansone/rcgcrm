@@ -7,6 +7,8 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\OpportunityController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\FollowupHistoryController;
@@ -39,6 +41,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // CRUD principales (si querés, podés sumar middleware permission por recurso)
     Route::resource('users', UserController::class);
+    Route::resource('roles', RoleController::class);
+    Route::resource('permissions', PermissionController::class)->only(['index']);
     Route::resource('contacts', ContactController::class);
     Route::resource('opportunities', OpportunityController::class);
 

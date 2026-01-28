@@ -117,7 +117,31 @@
       </div>
     </a>
     @endcan
+    
+    @can('roles.view')
+    <a href="{{ route('roles.index') }}" class="{{ $navItemClass('roles') }}">
+      <div class="flex items-center gap-3">
+        <svg class="{{ $iconClass }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 3l8 4-8 4-8-4 8-4z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 11l8 4 8-4" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 15l8 4 8-4" />
+        </svg>
+        <span>Roles</span>
+      </div>
+    </a>
+    @endcan
 
+    @can('permissions.view')
+    <a href="{{ route('permissions.index') }}" class="{{ $navItemClass('permissions') }}">
+      <div class="flex items-center gap-3">
+        <svg class="{{ $iconClass }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M20 12a8 8 0 11-16 0 8 8 0 0116 0z" />
+        </svg>
+        <span>Permisos</span>
+      </div>
+    </a>
+    @endcan
   </nav>
 
   <div class="p-4 border-t border-gray-100">

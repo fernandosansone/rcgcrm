@@ -4,6 +4,10 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Spatie\Permission\Models\Role;
+use App\Policies\RolePolicy;
+use Spatie\Permission\Models\Permission;
+use App\Policies\PermissionPolicy;
 use App\Models\Opportunity;
 use App\Policies\OpportunityPolicy;
 use App\Models\OpportunityFollowup;
@@ -24,6 +28,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Gate::policy(Role::class, RolePolicy::class);
+        Gate::policy(Permission::class, PermissionPolicy::class);
         Gate::policy(Opportunity::class, OpportunityPolicy::class);
         Gate::policy(OpportunityFollowup::class, OpportunityFollowupPolicy::class);
     }
