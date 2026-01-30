@@ -10,11 +10,12 @@
     <div class="max-w-4xl mx-auto sm:px-6 lg:px-8 space-y-4">
 
       @if ($errors->any())
-        <x-card><x-alert type="error">{{ $errors->first() }}</x-alert></x-card>
+        <x-card><x-alert type="error">Revisá los campos marcados.</x-alert></x-card>
       @endif
 
-      <x-card title="Datos del usuario">
+      <x-card title="Datos del usuario" subtitle="Nombre, email, contraseña y roles.">
         <form method="POST" action="{{ route('users.store') }}">
+          @csrf
           @include('users._form', ['roles' => $roles])
         </form>
       </x-card>

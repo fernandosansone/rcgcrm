@@ -19,6 +19,7 @@
 
       <x-card title="Datos de la oportunidad" subtitle="Elegí un contacto, detalle y estado.">
         <form method="POST" action="{{ route('opportunities.store') }}">
+          @csrf
           @include('opportunities._form', ['showClosedAt' => false])
         </form>
       </x-card>

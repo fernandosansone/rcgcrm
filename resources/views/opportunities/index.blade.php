@@ -25,7 +25,7 @@
         </x-card>
       @endif
 
-      <x-card title="Filtros" subtitle="Buscá por detalle o contacto y filtrá por estado.">
+      <x-card title="Búsqueda" subtitle="Buscá por detalle o contacto y filtrá por estado.">
         <form method="GET">
           <x-filterbar>
             <div class="w-full md:w-[28rem]">
@@ -47,7 +47,7 @@
             </div>
 
             <div>
-              <x-primary-button>Filtrar</x-primary-button>
+              <x-primary-button>Buscar</x-primary-button>
             </div>
 
             @if($q || $status)

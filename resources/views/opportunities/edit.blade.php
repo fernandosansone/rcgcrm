@@ -25,6 +25,7 @@
 
       <x-card title="Datos de la oportunidad" subtitle="Modificá detalle, estado, importe y fechas.">
         <form method="POST" action="{{ route('opportunities.update', $opportunity) }}">
+          @csrf
           @method('PUT')
           @include('opportunities._form', ['opportunity' => $opportunity, 'showClosedAt' => true])
         </form>

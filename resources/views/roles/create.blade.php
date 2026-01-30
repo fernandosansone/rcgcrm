@@ -7,19 +7,30 @@
   </x-slot>
 
   <div class="py-6">
-    <div class="max-w-5xl mx-auto sm:px-6 lg:px-8 space-y-4">
+    <div class="max-w-4xl mx-auto sm:px-6 lg:px-8 space-y-4">
+
+      @if (session('success'))
+        <x-card>
+          <x-alert type="success">{{ session('success') }}</x-alert>
+        </x-card>
+      @endif
+
       @if ($errors->any())
-        <x-card><x-alert type="error">Revisá los campos marcados.</x-alert></x-card>
+        <x-card>
+          <x-alert type="error">Revisá los campos marcados.</x-alert>
+        </x-card>
       @endif
 
       <x-card title="Datos del rol" subtitle="Nombre y permisos asociados.">
         <form method="POST" action="{{ route('roles.store') }}">
+          @csrf
           @include('roles._form', [
             'permissions' => $permissions,
             'selectedPermissions' => old('permissions', [])
           ])
         </form>
       </x-card>
+
     </div>
   </div>
 </x-app-layout>

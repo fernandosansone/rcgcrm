@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -18,8 +19,10 @@ class UserController extends Controller
         $users = User::query()
             ->with('roles')
             ->when($q !== '', function ($query) use ($q) {
-                $query->where('name', 'like', "%{$q}%")
-                      ->orWhere('email', 'like', "%{$q}%");
+                $query->where(function ($sub) use ($q) {
+                    $sub->where('name', 'like', "%{$q}%")
+                        ->orWhere('email', 'like', "%{$q}%");
+                });
             })
             ->orderBy('name')
             ->paginate(15)
@@ -45,7 +48,7 @@ class UserController extends Controller
             'name' => ['required','string','max:255'],
             'email' => ['required','email','max:255','unique:users,email'],
             'password' => ['required','string','min:8','confirmed'],
-            'roles' => ['array'],
+            'roles' => ['nullable','array'],
             'roles.*' => ['string','exists:roles,name'],
         ]);
 
@@ -56,6 +59,7 @@ class UserController extends Controller
         ]);
 
         $user->syncRoles($data['roles'] ?? []);
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
 
         return redirect()->route('users.index')->with('success', 'Usuario creado.');
     }
@@ -78,27 +82,41 @@ class UserController extends Controller
             'name' => ['required','string','max:255'],
             'email' => ['required','email','max:255','unique:users,email,' . $user->id],
             'password' => ['nullable','string','min:8','confirmed'],
-            'roles' => ['array'],
+            'roles' => ['nullable','array'],
             'roles.*' => ['string','exists:roles,name'],
         ]);
 
-        $user->name = $data['name'];
-        $user->email = $data['email'];
+        $payload = [
+            'name' => $data['name'],
+            'email' => $data['email'],
+        ];
 
         if (!empty($data['password'])) {
-            $user->password = Hash::make($data['password']);
+            $payload['password'] = Hash::make($data['password']);
         }
 
-        $user->save();
+        $user->update($payload);
 
-        $user->syncRoles($data['roles'] ?? []);
+        // Solo quien tenga permiso para administrar roles puede cambiarlos
+        if ($request->user()->can('roles.update')) {
+            $user->syncRoles($data['roles'] ?? []);
+            app(PermissionRegistrar::class)->forgetCachedPermissions();
+        }
 
         return redirect()->route('users.index')->with('success', 'Usuario actualizado.');
     }
 
-    public function destroy(User $user)
+    public function destroy(Request $request, User $user)
     {
         $this->authorize('delete', $user);
+
+        if ((int)$user->id === (int)$request->user()->id) {
+            abort(403, 'No podés eliminar tu propio usuario.');
+        }
+
+        if ($user->hasRole('Admin')) {
+            abort(403, 'No se puede eliminar un usuario Admin.');
+        }
 
         $user->delete();
 

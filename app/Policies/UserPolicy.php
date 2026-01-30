@@ -18,14 +18,36 @@ class UserPolicy
 
     public function update(User $user, User $model): bool
     {
-        return $user->can('users.update');
+        // Permiso global
+        if ($user->can('users.update_all')) {
+            return true;
+        }
+
+        // Permiso básico: puede editar solo usuarios NO Admin
+        if ($user->can('users.update')) {
+            return !$model->hasRole('Admin');
+        }
+
+        return false;
     }
 
     public function delete(User $user, User $model): bool
     {
-        // Evitar borrarse a sí mismo (buena práctica)
-        if ($user->id === $model->id) return false;
+        // Nunca borrarse a sí mismo
+        if ($user->id === $model->id) {
+            return false;
+        }
 
-        return $user->can('users.delete');
+        // Permiso global
+        if ($user->can('users.delete_all')) {
+            return true;
+        }
+
+        // Permiso básico: no puede borrar Admin
+        if ($user->can('users.delete')) {
+            return !$model->hasRole('Admin');
+        }
+
+        return false;
     }
 }

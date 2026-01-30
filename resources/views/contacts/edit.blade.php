@@ -31,6 +31,7 @@
 
       <x-card title="Datos del contacto" subtitle="Modificá nombre, empresa, emails y teléfonos.">
         <form method="POST" action="{{ route('contacts.update', $contact) }}">
+          @csrf
           @method('PUT')
           @include('contacts._form', ['contact' => $contact])
         </form>

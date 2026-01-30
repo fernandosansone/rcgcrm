@@ -2,27 +2,32 @@
   <x-slot name="header">
     <div class="flex items-center justify-between gap-4">
       <div>
-        <h2 class="font-semibold text-xl text-gray-900 leading-tight">Editar rol: {{ $role->name }}</h2>
-        <div class="text-sm text-gray-500 mt-1">Ajustá permisos y reglas de acceso.</div>
+        <h2 class="font-semibold text-xl text-gray-900 leading-tight">Editar rol</h2>
+        <div class="text-sm text-gray-500 mt-1">ID #{{ $role->id }} · Ajustá nombre y permisos asignados.</div>
       </div>
 
       <a href="{{ route('roles.index') }}">
-        <x-secondary-button type="button">Volver</x-secondary-button>
+        <x-secondary-button type="button">Cancelar</x-secondary-button>
       </a>
     </div>
   </x-slot>
 
   <div class="py-6">
-    <div class="max-w-5xl mx-auto sm:px-6 lg:px-8 space-y-4">
+    <div class="max-w-4xl mx-auto sm:px-6 lg:px-8 space-y-4">
+
       @if (session('success'))
-        <x-card><x-alert type="success">{{ session('success') }}</x-alert></x-card>
+        <x-card>
+          <x-alert type="success">{{ session('success') }}</x-alert>
+        </x-card>
       @endif
 
       @if ($errors->any())
-        <x-card><x-alert type="error">{{ $errors->first() }}</x-alert></x-card>
+        <x-card>
+          <x-alert type="error">{{ $errors->first() }}</x-alert>
+        </x-card>
       @endif
 
-      <x-card title="Configuración" subtitle="Nombre del rol y permisos asignados.">
+      <x-card title="Datos del rol" subtitle="Nombre del rol y permisos asignados.">
         <form method="POST" action="{{ route('roles.update', $role) }}">
           @csrf
           @method('PUT')
@@ -34,6 +39,7 @@
           ])
         </form>
       </x-card>
+
     </div>
   </div>
 </x-app-layout>

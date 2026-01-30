@@ -14,6 +14,12 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <script>
+            window.RCGCRM = window.RCGCRM || {};
+            window.RCGCRM.routes = {
+                contactsQuickStore: @json(route('contacts.quick-store')),
+            };
+        </script>
     </head>
 <body class="font-sans antialiased bg-gray-50">
     <div x-data="{ sidebarOpen: false }" class="min-h-screen">

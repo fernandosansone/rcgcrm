@@ -36,7 +36,7 @@
             </div>
 
             <div>
-              <x-primary-button>Filtrar</x-primary-button>
+              <x-primary-button>Buscar</x-primary-button>
             </div>
 
             @if($q)

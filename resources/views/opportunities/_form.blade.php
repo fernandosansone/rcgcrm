@@ -3,8 +3,6 @@
   $error = "ring-red-300 focus:ring-red-300";
 @endphp
 
-@csrf
-
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
   {{-- CONTACTO + QUICK CREATE --}}
@@ -32,7 +30,7 @@
     @error('contact_id') <div class="text-red-600 text-sm mt-1">{{ $message }}</div> @enderror
 
     {{-- MODAL NUEVO CONTACTO --}}
-    <div x-show="open" class="fixed inset-0 flex items-center justify-center bg-black/50" style="display:none">
+    <div x-show="open" x-cloak class="fixed inset-0 flex items-center justify-center bg-black/50" style="display:none">
       <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg ring-1 ring-gray-100">
         <div class="px-6 pt-5 pb-4 border-b border-gray-100 flex justify-between items-center">
           <div>
@@ -162,83 +160,9 @@
   @endif
 
 </div>
-
 <div class="mt-6 flex justify-end gap-2">
   <a href="{{ route('opportunities.index') }}">
     <x-secondary-button type="button">Cancelar</x-secondary-button>
   </a>
   <x-primary-button>Guardar</x-primary-button>
 </div>
-
-{{-- JS: moneyInput + contactQuickCreate --}}
-<script>
-function moneyInput(initialRaw) {
-  return {
-    display: '',
-    raw: (initialRaw || '').toString(),
-    init() {
-      if (this.raw) {
-        const parts = this.raw.split('.');
-        const int = parts[0] || '';
-        const dec = (parts[1] || '').slice(0,2);
-        const withDots = int.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-        this.display = dec ? `${withDots},${dec}` : withDots;
-      }
-    },
-    format() {
-      let v = (this.display || '').toString().replace(/[^\d,]/g, '');
-      const parts = v.split(',');
-      let int = parts[0] || '';
-      let dec = (parts[1] || '').slice(0,2);
-
-      int = int.replace(/^0+(?=\d)/,'');
-      const withDots = int.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-
-      this.display = dec.length ? `${withDots},${dec}` : withDots;
-      this.raw = dec.length ? `${int}.${dec}` : int;
-    }
-  }
-}
-
-function contactQuickCreate() {
-  return {
-    open: false,
-    error: '',
-    form: { first_name:'', last_name:'', company_name:'', email_1:'', phone_1:'' },
-
-    async submit() {
-      this.error = '';
-      try {
-        const res = await fetch('{{ route('contacts.quick-store') }}', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify(this.form)
-        });
-
-        if (!res.ok) {
-          const payload = await res.json().catch(() => ({}));
-          this.error = payload?.message ?? 'No se pudo crear el contacto.';
-          return;
-        }
-
-        const data = await res.json();
-        const opt = document.createElement('option');
-        opt.value = data.id;
-        opt.textContent = data.label;
-        opt.selected = true;
-
-        this.$refs.contactSelect.appendChild(opt);
-        this.open = false;
-
-        this.form = { first_name:'', last_name:'', company_name:'', email_1:'', phone_1:'' };
-      } catch (e) {
-        this.error = 'Error de red al crear el contacto.';
-      }
-    }
-  }
-}
-</script>

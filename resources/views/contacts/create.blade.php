@@ -25,6 +25,7 @@
 
       <x-card title="Datos del contacto" subtitle="Nombre, empresa y medios de contacto.">
         <form method="POST" action="{{ route('contacts.store') }}">
+          @csrf
           @include('contacts._form')
         </form>
       </x-card>

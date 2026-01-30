@@ -3,8 +3,6 @@
   $error = "ring-red-300 focus:ring-red-300";
 @endphp
 
-@csrf
-
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
   {{-- NOMBRE --}}
