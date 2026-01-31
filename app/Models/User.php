@@ -46,4 +46,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function primaryRole(): ?string
+    {
+        return $this->roles->pluck('name')->first();
+    }
 }
