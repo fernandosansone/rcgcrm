@@ -118,6 +118,7 @@
 
     <form method="POST" action="{{ route('logout') }}" class="mt-3">
       @csrf
+
       <button type="submit"
         class="w-full flex items-center justify-between gap-3 px-3 py-2 rounded-xl text-sm font-medium text-red-600 hover:bg-red-50 transition">
         <div class="flex items-center gap-3">
@@ -126,6 +127,7 @@
         </div>
         <span class="text-xs text-red-500">Salir</span>
       </button>
+      
     </form>
   </div>
 </aside>
