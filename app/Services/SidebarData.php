@@ -11,6 +11,14 @@ use App\Models\User;
 class SidebarData
 {
     /**
+     * Helper para activar o no un menú
+     */
+    protected function moduleEnabled(string $key): bool
+    {
+        return (bool) config("rcgcrm.modules.$key", true);
+    }
+
+    /**
      * Devuelve data lista para la vista del sidebar:
      * - menu (items ya filtrados por permisos)
      * - overdueCount (badge atrasos agenda)
@@ -54,11 +62,11 @@ class SidebarData
         $admin = [];
 
         // --- CRM
-        if ($user->can('dashboard.view')) {
+        if ($this->moduleEnabled('dashboard') && $user->can('dashboard.view')) {
             $crm[] = $this->item('dashboard', 'Dashboard', 'dashboard', 'dashboard');
         }
 
-        if ($user->can('agenda.view')) {
+        if ($this->moduleEnabled('agenda') && $user->can('agenda.view')) {
             $crm[] = $this->item(
                 'agenda',
                 'Agenda',
@@ -69,39 +77,31 @@ class SidebarData
             );
         }
 
-        if ($user->can('contacts.view')) {
+        if ($this->moduleEnabled('contacts') && $user->can('contacts.view')) {
             $crm[] = $this->item('contacts', 'Contactos', 'contacts.index', 'users');
         }
 
-        if ($user->can('opportunities.view')) {
+        if ($this->moduleEnabled('opportunities') && $user->can('opportunities.view')) {
             $crm[] = $this->item('opportunities', 'Oportunidades', 'opportunities.index', 'doc');
         }
 
-        if ($user->can('reports.view')) {
-            $crm[] = $this->item(
-                'reports',
-                'Reportes',
-                'reports.commercial',
-                'chart',
-                null,
-                null,
-                'reports/commercial'
-            );
+        if ($this->moduleEnabled('reports') && $user->can('reports.view')) {
+            $crm[] = $this->item('reports', 'Reportes', 'reports.commercial', 'chart', null, null, 'reports/commercial');
         }
 
         // --- Administración
-        if ($user->can('users.view')) {
+        if ($this->moduleEnabled('users') && $user->can('users.view')) {
             $admin[] = $this->item('users', 'Usuarios', 'users.index', 'user');
         }
 
-        if ($user->can('roles.view')) {
+        if ($this->moduleEnabled('roles') && $user->can('roles.view')) {
             $admin[] = $this->item('roles', 'Roles', 'roles.index', 'layers');
         }
 
-        if ($user->can('permissions.view')) {
+        if ($this->moduleEnabled('permissions') && $user->can('permissions.view')) {
             $admin[] = $this->item('permissions', 'Permisos', 'permissions.index', 'clock');
         }
-
+        
         // Limpieza defensiva: quita items sin route/label
         $crm = array_values(array_filter($crm, fn($i) => !empty($i['route']) && !empty($i['label'])));
         $admin = array_values(array_filter($admin, fn($i) => !empty($i['route']) && !empty($i['label'])));
