@@ -15,31 +15,32 @@
 
   <div class="py-6">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-4">
-
+    
       {{-- KPIs --}}
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+
         <div class="rounded-2xl bg-white p-4 ring-1 ring-gray-100">
           <div class="text-xs text-gray-500">Contactos</div>
           <div class="mt-1 text-2xl font-semibold text-gray-900">{{ $contactsTotal }}</div>
-          <div class="mt-2 text-sm text-gray-600">Total en el sistema</div>
+          <!-- <div class="mt-2 text-sm text-gray-600">Total en el sistema</div> -->
         </div>
 
         <div class="rounded-2xl bg-white p-4 ring-1 ring-gray-100">
           <div class="text-xs text-gray-500">Mis oportunidades</div>
           <div class="mt-1 text-2xl font-semibold text-gray-900">{{ $myOppTotal }}</div>
-          <div class="mt-2 text-sm text-gray-600">Asignadas a mí</div>
+          <!-- <div class="mt-2 text-sm text-gray-600">Asignadas a mí</div> -->
         </div>
 
         <div class="rounded-2xl bg-white p-4 ring-1 ring-gray-100">
           <div class="text-xs text-gray-500">Abiertas</div>
           <div class="mt-1 text-2xl font-semibold text-gray-900">{{ $myOppOpen }}</div>
-          <div class="mt-2 text-sm text-gray-600">Sin cerrar</div>
+          <!-- <div class="mt-2 text-sm text-gray-600">Sin cerrar</div> -->
         </div>
 
         <div class="rounded-2xl bg-white p-4 ring-1 ring-gray-100">
           <div class="text-xs text-gray-500">En cotización</div>
           <div class="mt-1 text-2xl font-semibold text-gray-900">{{ $myOppInQuote }}</div>
-          <div class="mt-2 text-sm text-gray-600">Requieren propuesta</div>
+          <!-- <div class="mt-2 text-sm text-gray-600">Requieren propuesta</div> -->
         </div>
       </div>
 
@@ -101,8 +102,8 @@
         {{-- Agenda Hoy --}}
         <div class="rounded-2xl bg-white p-5 ring-1 ring-gray-100">
           <div>
-            <div class="text-lg font-semibold text-gray-900">Agenda de hoy</div>
-            <div class="text-sm text-gray-500 mt-1">Contactos planificados para hoy.</div>
+            <div class="text-lg font-semibold text-gray-900">Agenda para HOY</div>
+            <div class="text-sm text-gray-500 mt-1">Seguimientos planificados para hoy.</div>
           </div>
 
           <div class="mt-4 space-y-3">
